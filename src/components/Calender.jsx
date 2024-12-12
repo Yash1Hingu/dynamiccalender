@@ -106,7 +106,6 @@ const Calendar = ({ onDateClick, selectedDate, events }) => {
             selectedDate && selectedDate.toDateString() === day.toDateString();
         const dateKey = day.toISOString().split("T")[0];
         const hasEvents = events[dateKey] && events[dateKey].length > 0;
-        console.log(hasEvents);
         const eventColor = hasEvents ? getRandomColor(dateKey) : "";
 
         return (
