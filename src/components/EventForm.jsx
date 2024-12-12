@@ -10,7 +10,6 @@ const EventForm = ({ initialEvent, onAddEvent, onUpdateEvent, onClose, isCurrent
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => {
-            console.log(prev);
             return ({ ...prev, [name]: value })
         });
     };

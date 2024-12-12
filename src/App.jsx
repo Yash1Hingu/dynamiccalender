@@ -36,6 +36,7 @@ const App = () => {
     setSelectedDate(date);
     const dateKey = date.toISOString().split("T")[0];
     setSelectedEvents(events[dateKey] || []);
+    setCurrentEvent(null);
     setEventFormVisible(true);
   };
 
@@ -76,6 +77,8 @@ const App = () => {
       return { ...prev, [dateKey]: updatedEvents };
     });
 
+    setCurrentEvent(null);
+    setCurrentindex(null);
     setEventFormVisible(false);
   };
 
@@ -95,6 +98,9 @@ const App = () => {
       setSelectedEvents(updatedEvents); // Update selected events
       return { ...prev, [dateKey]: updatedEvents };
     });
+
+    setCurrentEvent(null);
+    setCurrentindex(null);
     setEventFormVisible(false);
   };
 
@@ -117,7 +123,11 @@ const App = () => {
       </h1>
       <div className="max-h-screen max-w-[1240px] m-auto p-4 sm:grid grid-cols-3 gap-4">
         <div className="col-span-2">
-          <Calendar onDateClick={handleDateClick} selectedDate={selectedDate} />
+          <Calendar
+            onDateClick={handleDateClick}
+            selectedDate={selectedDate}
+            events={events}
+          />
         </div>
         {eventFormVisible && (
           <EventForm
@@ -125,7 +135,11 @@ const App = () => {
             initialEvent={currentEvent}
             onAddEvent={handleAddEvent}
             onUpdateEvent={handleUpdateEvent}
-            onClose={() => setEventFormVisible(false)}
+            onClose={() => {
+              setCurrentEvent(null);
+              setCurrentindex(null);
+              setEventFormVisible(false);
+            }}
           />
         )}
         <div className="col-span-1">
