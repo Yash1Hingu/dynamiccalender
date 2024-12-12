@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import right from '../assets/right.svg';
+import left from '../assets/left.svg'; 
 
 const Calendar = ({ onDateClick, selectedDate }) => {
     const [currentDate, setCurrentDate] = useState(selectedDate || new Date());
@@ -56,7 +58,7 @@ const Calendar = ({ onDateClick, selectedDate }) => {
         return (
             <button
                 key={`prev-${i}`}
-                className="p-2 m-1 w-10 h-10 flex items-center justify-center text-sm font-medium bg-gray-100 text-gray-400 rounded-full"
+                className="p-2 m-auto w-8 h-8 flex items-center justify-center text-sm text-gray-400 rounded-full"
                 disabled
             >
                 {prevDate.getDate()}
@@ -76,7 +78,7 @@ const Calendar = ({ onDateClick, selectedDate }) => {
         return (
             <button
                 key={`next-${i}`}
-                className="p-2 m-1 w-10 h-10 flex items-center justify-center text-sm font-medium bg-gray-100 text-gray-400 rounded-full"
+                className="p-2 m-auto w-10 h-10 flex items-center justify-center text-sm text-gray-400 rounded-full"
                 disabled
             >
                 {nextDate.getDate()}
@@ -99,12 +101,12 @@ const Calendar = ({ onDateClick, selectedDate }) => {
             <button
                 key={`current-${i}`}
                 onClick={() => onDateClick(day)}
-                className={`p-2 m-1 w-10 h-10 flex items-center justify-center text-sm font-medium rounded-full ${
+                className={`p-2 m-auto w-10 h-10 flex items-center justify-center text-sm rounded-full ${
                     isSelected
                         ? "bg-green-500 text-white"
                         : isToday
                         ? "bg-blue-500 text-white"
-                        : "bg-gray-200 text-gray-800"
+                        : "text-gray-800"
                 }`}
             >
                 {i + 1}
@@ -114,14 +116,14 @@ const Calendar = ({ onDateClick, selectedDate }) => {
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-lg">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-center gap-8 items-center mb-8">
                 <button
                     onClick={handlePreviousMonth}
-                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    className="px-4 py-2 rounded-md"
                 >
-                    Previous
+                    <img src={left} alt="previous" className="w-8"/>
                 </button>
-                <h2 className="text-xl font-bold">
+                <h2 className="sm:text-xl font-normal">
                     {currentDate.toLocaleString("default", {
                         month: "long",
                         year: "numeric",
@@ -129,14 +131,14 @@ const Calendar = ({ onDateClick, selectedDate }) => {
                 </h2>
                 <button
                     onClick={handleNextMonth}
-                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    className="px-4 py-2 rounded-md"
                 >
-                    Next
+                    <img src={right} alt="Next" className="w-8" />
                 </button>
             </div>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-2 text-center">
                 {"Sun Mon Tue Wed Thu Fri Sat".split(" ").map((day, index) => (
-                    <div key={index} className="text-center font-bold">
+                    <div key={index} className="text-center font-medium">
                         {day}
                     </div>
                 ))}

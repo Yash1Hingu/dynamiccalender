@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "./components/Calender";
 import EventForm from "./components/EventForm";
 import EventList from "./components/EventList";
+
+import logo from './assets/logo.svg';
 
 const App = () => {
   const [events, setEvents] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [eventFormVisible, setEventFormVisible] = useState(false);
-  const [currentEvent,setCurrentEvent] = useState(null);
-  const [currentindex,setCurrentindex] = useState();
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [currentindex, setCurrentindex] = useState();
+
+  // Load events from localStorage on component mount
+  useEffect(() => {
+    const storedEvents = localStorage.getItem("events");
+    if (storedEvents) {
+      setEvents(JSON.parse(storedEvents));
+    }
+  }, []);
+
+  // Save events to localStorage whenever the events state changes
+  useEffect(() => {
+    localStorage.setItem("events", JSON.stringify(events));
+  }, [events]);
+
+  // Refresh selectedEvents whenever events or selectedDate changes
+  useEffect(() => {
+    const dateKey = selectedDate.toISOString().split("T")[0];
+    setSelectedEvents(events[dateKey] || []);
+  }, [events, selectedDate]);
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -17,16 +38,6 @@ const App = () => {
     setSelectedEvents(events[dateKey] || []);
     setEventFormVisible(true);
   };
-
-  // const handleAddEvent = (newEvent) => {
-  //   const dateKey = selectedDate.toISOString().split("T")[0];
-  //   console.log(events)
-  //   setEvents((prev) => ({
-  //     ...prev,
-  //     [dateKey]: [...(prev[dateKey] || []), newEvent],
-  //   }));
-  //   setEventFormVisible(false);
-  // };
 
   const handleAddEvent = (newEvent) => {
     const dateKey = selectedDate.toISOString().split("T")[0];
@@ -68,12 +79,12 @@ const App = () => {
     setEventFormVisible(false);
   };
 
-  const handleEditEvent = (index, updatedEvent) => {
+  const handleEditEvent = (index) => {
     const dateKey = selectedDate.toISOString().split("T")[0];
     setCurrentEvent(events[dateKey][index]);
     setCurrentindex(index);
     setEventFormVisible(true);
-  }
+  };
 
   const handleUpdateEvent = (newEventData) => {
     const dateKey = selectedDate.toISOString().split("T")[0];
@@ -96,24 +107,36 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen p-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Calendar App</h1>
-      <Calendar onDateClick={handleDateClick} selectedDate={selectedDate} />
-      {eventFormVisible && (
-        <EventForm
-          isCurrentDate={selectedDate.toDateString() === new Date().toDateString()}
-          initialEvent={currentEvent}
-          onAddEvent={handleAddEvent}
-          onUpdateEvent={handleUpdateEvent}
-          onClose={() => setEventFormVisible(false)}
+    <>
+      <h1 className="text-2xl font-bold text-center py-2">
+        <img
+          src={logo}
+          alt="logo"
+          className="w-16 m-auto"
         />
-      )}
-      <EventList
-        events={selectedEvents}
-        onEditEvent={(index) => handleEditEvent(index, selectedEvents[index])}
-        onDeleteEvent={handleDeleteEvent}
-      />
-    </div>
+      </h1>
+      <div className="max-h-screen max-w-[1240px] m-auto p-4 sm:grid grid-cols-3 gap-4">
+        <div className="col-span-2">
+          <Calendar onDateClick={handleDateClick} selectedDate={selectedDate} />
+        </div>
+        {eventFormVisible && (
+          <EventForm
+            isCurrentDate={selectedDate.toDateString() === new Date().toDateString()}
+            initialEvent={currentEvent}
+            onAddEvent={handleAddEvent}
+            onUpdateEvent={handleUpdateEvent}
+            onClose={() => setEventFormVisible(false)}
+          />
+        )}
+        <div className="col-span-1">
+          <EventList
+            events={selectedEvents}
+            onEditEvent={(index) => handleEditEvent(index)}
+            onDeleteEvent={handleDeleteEvent}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

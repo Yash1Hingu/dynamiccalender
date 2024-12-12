@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TimePicker from "./TimePicker";
+import close from '../assets/close.svg';
 
 const EventForm = ({ initialEvent, onAddEvent, onUpdateEvent, onClose, isCurrentDate }) => {
     const [formData, setFormData] = useState(
@@ -28,9 +29,9 @@ const EventForm = ({ initialEvent, onAddEvent, onUpdateEvent, onClose, isCurrent
     }
 
     return (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+        <div className="fixed z-10 inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
             <form
-                className="bg-white p-6 rounded-lg shadow-lg"
+                className="bg-white sm:w-[40%] w-auto p-6 rounded-lg shadow-lg relative"
                 onSubmit={handleSubmit}
             >
                 <h2 className="text-lg font-bold mb-4">Add Event</h2>
@@ -40,7 +41,7 @@ const EventForm = ({ initialEvent, onAddEvent, onUpdateEvent, onClose, isCurrent
                     placeholder="Event Name"
                     value={formData.title}
                     onChange={handleChange}
-                    className="block w-full mb-2 p-2 border rounded"
+                    className="block w-full mb-2 p-2 border outline-none rounded"
                     required
                 />
                 <TimePicker
@@ -55,21 +56,21 @@ const EventForm = ({ initialEvent, onAddEvent, onUpdateEvent, onClose, isCurrent
                     placeholder="Description"
                     value={formData.description}
                     onChange={handleChange}
-                    className="block w-full mb-4 p-2 border rounded"
+                    className="block w-full mb-4 p-2 border outline-none rounded"
                     required
                 />
                 <button
                     type="submit"
-                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    className="px-4 py-2 bg-purple-700 text-white"
                 >
                     Save
                 </button>
                 <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 bg-red-500 text-white rounded ml-2"
+                    className="p-2 text-white ml-2 absolute top-0 right-0 bg-rose-600 rounded-tr-md"
                 >
-                    Cancel
+                    <img src={close} alt="close" />
                 </button>
             </form>
         </div>
